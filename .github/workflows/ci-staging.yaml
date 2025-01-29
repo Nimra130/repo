@@ -1,0 +1,21 @@
+name: wf_ci_staging
+on:
+  pull_request:
+    branches:
+      -"release/**"
+jobs: 
+  ci-build_staging_job:
+  runs-on: ubantu-latest
+  steps:  
+   -name: check repo
+    uses: actions/checkout@v4
+    with:
+      ref: ${{github.ref}}
+    -name: lint html and css files
+     run: |
+       npx htmlhint "**/.html"
+       npx stylelint "**/.css"
+    -name: build artifacts
+     run: |
+      npx parcel build "./src/index.html" --dist-dir "./dist" --public-url "./"
+      
