@@ -1,0 +1,32 @@
+name: cd_development
+on:
+  push:
+    branches:
+      -develop
+jobs:
+  cd_build-development_job:
+   runs_on: ubantu-latest
+   steps:
+    -name: checkout repo
+     uses: actions/checkout@v4
+     -name: create build build artifacts
+     run: |
+      npx parcel build "./src/index.html" --dist-dir "./dist" --public-url "./"
+     -name: upload develpment artifacts
+      uses: actions/upload-page-artifacts@v3
+      with:
+       path: "./dist"
+       name: "development artifacts"
+cd_deploy-development_job:
+  needs: "cd_build-development_job"
+  environment: " development-env"
+  permissions:
+    pages: write
+    id_token: erite
+  runs_on: ubantu-latest
+    -name: deploy/atrifacts
+     uses: actions/deploy-pages@v4
+     with: 
+       artifacts_name: "development artifacts"
+       token: ${{github.token}}
+       
