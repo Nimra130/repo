@@ -1,0 +1,19 @@
+name: wf-ci-development
+on:
+  pull_request:
+    branches:
+      -develop
+jobs:
+  ci-develpment-job:
+  runs-on: ubantu-latest
+  steps:
+    -name: checkout repo
+     uses: actions/checkout@v4
+     -name: lint html and css code
+      run: |
+       npx htmlhint "**/*.html"
+       npx stylelint "**/*.css"
+      -name: test build
+       run: |
+        npx parcel build  "./src/index.html" --dist-dir "./dst" --public-url "./"
+        
